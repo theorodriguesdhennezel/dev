@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Folder to save wallpapers
+WALLPAPER_DIR="$HOME/Pictures/FoxWallpapers"
+mkdir -p "$WALLPAPER_DIR"
+
+# Get fox image URL from randomfox API
+IMG_URL=$(curl -s https://randomfox.ca/floof/ | grep -o '"image":"[^"]*' | sed 's/"image":"//')
+
+# Filename with today's date
+FILENAME="$WALLPAPER_DIR/fox_$(date +%F).jpg"
+
+# Download image
+curl -s -o "$FILENAME" "$IMG_URL"
+
+# Set wallpaper on all desktops (multi-monitor friendly)
+osascript -e "tell application \"System Events\" to set picture of every desktop to (POSIX file \"$FILENAME\")"
+
+echo "🦊 New fox wallpaper set: $FILENAME"
